@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:16-bookworm
+    container_name: shopflow-db
+    environment:
+      POSTGRES_DB: shopflow
+      POSTGRES_USER: shopflow_user
+      POSTGRES_PASSWORD: shopflow_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: shopflow-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/shopflow
+      SPRING_DATASOURCE_USERNAME: shopflow_user
+      SPRING_DATASOURCE_PASSWORD: shopflow_pass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
