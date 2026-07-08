@@ -6,21 +6,21 @@
             </h2>
 
             <mat-nav-list>
-                <mat-list-item class="my-2"  mat-list-item (click)="filterBy(null) " [activated]="selectedCategory() === null">
-                    <span matListTitle [class]="null === selectedCategory() ? 'text-white' : null"> All</span>
+                <mat-list-item class="my-2"  mat-list-item (click)="filterBy(null) " [activated]="store.selectedCategory() === null">
+                    <span matListTitle [class]="null === store.selectedCategory() ? 'text-white' : null"> All</span>
                 </mat-list-item>
-                @for(cat of categories(); track cat.id){
-                    <mat-list-item [activated]="cat.name === selectedCategory()" class="my-2" mat-list-item (click)="filterBy(cat.name)">
-                        <span matListTitle calss="font-medium" [class]="cat.name === selectedCategory() ? 'text-white' : null"> {{ cat.name }}</span>
+                @for(cat of store.categories(); track cat.id){
+                    <mat-list-item [activated]="cat.name === store.selectedCategory()" class="my-2" mat-list-item (click)="filterBy(cat.name)">
+                        <span matListTitle class="font-medium" [class]="cat.name === store.selectedCategory() ? 'text-white' : null"> {{ cat.name }}</span>
                     </mat-list-item>
                 }
             </mat-nav-list>
         </div>
     </mat-sidenav>
     <mat-sidenav-content>
-        <h1 class="text-2xl font-bold text-gray-900 mb-6 ml-6">{{ selectedCategory() || 'All' }}</h1>
+        <h1 class="text-2xl font-bold text-gray-900 mb-6 ml-6">{{ store.selectedCategory() || 'All' }}</h1>
         <div class="responsive-grid">
-            @for(product of products(); track product.id){
+            @for(product of store.filteredProducts(); track product.id){
                 <app-product-card [product]="product" (addToCartClicked)="addToCart()"/>
             }
         </div>
