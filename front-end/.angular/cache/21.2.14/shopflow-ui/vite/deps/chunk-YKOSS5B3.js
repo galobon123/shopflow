@@ -2,17 +2,17 @@ import {
   _CdkPrivateStyleLoader,
   _VisuallyHiddenLoader,
   _setInnerHtml
-} from "./chunk-V73LXT4G.js";
+} from "./chunk-SR7NOOHU.js";
 import {
   DomSanitizer
-} from "./chunk-Z5H5X7OP.js";
+} from "./chunk-T2VNVATC.js";
 import {
   Platform,
   _getEventTarget,
   _getFocusedElementPierceShadowDom,
   _getShadowRoot,
   normalizePassiveListenerOptions
-} from "./chunk-WLGDDGFG.js";
+} from "./chunk-6BOASKZ5.js";
 import {
   ANIMATION_MODULE_TYPE,
   APP_ID,
@@ -42,14 +42,12 @@ import {
   ɵɵdefineInjectable,
   ɵɵdefineInjector,
   ɵɵdefineNgModule
-} from "./chunk-XWQQ42E4.js";
+} from "./chunk-BZ4IC765.js";
 import {
   BehaviorSubject,
   Observable,
   Subject,
   Subscription,
-  __spreadProps,
-  __spreadValues,
   combineLatest,
   concat,
   debounceTime,
@@ -63,7 +61,11 @@ import {
   take,
   takeUntil,
   tap
-} from "./chunk-PJVWDKLX.js";
+} from "./chunk-RSS3ODKE.js";
+import {
+  __spreadProps,
+  __spreadValues
+} from "./chunk-GOMI4DH3.js";
 
 // node_modules/@angular/cdk/fesm2022/_keycodes-chunk.mjs
 var TAB = 9;
@@ -1934,6 +1936,38 @@ var FocusKeyManager = class extends ListKeyManager {
   }
 };
 
+// node_modules/@angular/cdk/fesm2022/_id-generator-chunk.mjs
+var counters = {};
+var _IdGenerator = class __IdGenerator {
+  _appId = inject(APP_ID);
+  static _infix = `a${Math.floor(Math.random() * 1e5).toString()}`;
+  getId(prefix, randomize = false) {
+    if (this._appId !== "ng") {
+      prefix += this._appId;
+    }
+    if (!counters.hasOwnProperty(prefix)) {
+      counters[prefix] = 0;
+    }
+    return `${prefix}${randomize ? __IdGenerator._infix + "-" : ""}${counters[prefix]++}`;
+  }
+  static ɵfac = function _IdGenerator_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || __IdGenerator)();
+  };
+  static ɵprov = ɵɵdefineInjectable({
+    token: __IdGenerator,
+    factory: __IdGenerator.ɵfac,
+    providedIn: "root"
+  });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(_IdGenerator, [{
+    type: Injectable,
+    args: [{
+      providedIn: "root"
+    }]
+  }], null, null);
+})();
+
 // node_modules/@angular/cdk/fesm2022/coercion-private.mjs
 function coerceObservable(data) {
   if (!isObservable(data)) {
@@ -2198,38 +2232,6 @@ var TREE_KEY_MANAGER = new InjectionToken("tree-key-manager", {
   providedIn: "root",
   factory: () => (items, options) => new TreeKeyManager(items, options)
 });
-
-// node_modules/@angular/cdk/fesm2022/_id-generator-chunk.mjs
-var counters = {};
-var _IdGenerator = class __IdGenerator {
-  _appId = inject(APP_ID);
-  static _infix = `a${Math.floor(Math.random() * 1e5).toString()}`;
-  getId(prefix, randomize = false) {
-    if (this._appId !== "ng") {
-      prefix += this._appId;
-    }
-    if (!counters.hasOwnProperty(prefix)) {
-      counters[prefix] = 0;
-    }
-    return `${prefix}${randomize ? __IdGenerator._infix + "-" : ""}${counters[prefix]++}`;
-  }
-  static ɵfac = function _IdGenerator_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || __IdGenerator)();
-  };
-  static ɵprov = ɵɵdefineInjectable({
-    token: __IdGenerator,
-    factory: __IdGenerator.ɵfac,
-    providedIn: "root"
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(_IdGenerator, [{
-    type: Injectable,
-    args: [{
-      providedIn: "root"
-    }]
-  }], null, null);
-})();
 
 // node_modules/@angular/cdk/fesm2022/a11y.mjs
 var ID_DELIMITER = " ";
@@ -2596,11 +2598,6 @@ function _animationsDisabled() {
   return _getAnimationsState() !== "enabled";
 }
 
-// node_modules/@angular/cdk/fesm2022/coercion.mjs
-function coerceBooleanProperty(value) {
-  return value != null && `${value}` !== "false";
-}
-
 export {
   isFakeMousedownFromScreenReader,
   isFakeTouchstartFromScreenReader,
@@ -2615,9 +2612,11 @@ export {
   ObserversModule,
   InteractivityChecker,
   FocusTrapFactory,
+  A11yModule,
   hasModifierKey,
   FocusKeyManager,
-  _animationsDisabled,
-  coerceBooleanProperty
+  _IdGenerator,
+  AriaDescriber,
+  _animationsDisabled
 };
-//# sourceMappingURL=chunk-ALAEEYIU.js.map
+//# sourceMappingURL=chunk-YKOSS5B3.js.map
