@@ -4,10 +4,11 @@ import { MatSidenav, MatSidenavContainer, MatSidenavContent } from "@angular/mat
 import { MatNavList, MatListItem } from "@angular/material/list";
 import { EcommerceStore } from '../../ecommerce-store';
 import { Router } from '@angular/router';
+import { ToggleWishlistButton } from "../../components/toggle-wishlist-button/toggle-wishlist-button";
 
 @Component({
   selector: 'app-products-grid',
-  imports: [ProductCard, MatSidenav, MatSidenavContainer, MatSidenavContent, MatNavList, MatListItem],
+  imports: [ProductCard, MatSidenav, MatSidenavContainer, MatSidenavContent, MatNavList, MatListItem, ToggleWishlistButton],
   templateUrl: './products-grid.html',
   styleUrl: './products-grid.css',
 })

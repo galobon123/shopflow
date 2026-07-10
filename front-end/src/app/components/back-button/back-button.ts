@@ -10,6 +10,5 @@ import { RouterLink } from "@angular/router";
   styleUrl: './back-button.css',
 })
 export class BackButton {
-  label = input('');
   navigateTo = input<string>();
 }
