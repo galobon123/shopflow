@@ -4,13 +4,16 @@ import { ProductResponse } from './core/models/product.model';
 import { CategoryResponse } from './core/models/category.model';
 import { ProductService } from './core/services/product.service';
 import { CategoryService } from './core/services/category.service';
+import { WishListService } from './core/services/wishlist.service';
+import { AuthService } from './core/services/auth.service';
+import { WishListResponse } from './core/models/wishlist.model';
 import { produce } from 'immer';
-import { Toaster } from './core/services/toaster';
+import { Toaster } from './core/services/toaster.service';
 
 type EcommerceState = {
   products: ProductResponse[];
   categories: CategoryResponse[];
-  wishListItems: ProductResponse[];
+  wishListItems: WishListResponse[];
   selectedCategory: string | null;
   loading: boolean;
   error: string | null;
@@ -38,7 +41,12 @@ export const EcommerceStore = signalStore(
   wishListCount: computed(() => store.wishListItems().length),
 })),
 
-  withMethods((store, productService = inject(ProductService), categoryService = inject(CategoryService), toaster = inject(Toaster)) => ({
+  withMethods((store,
+    productService = inject(ProductService), 
+    categoryService = inject(CategoryService), 
+    wishListService = inject(WishListService),
+    authService = inject(AuthService),
+    toaster = inject(Toaster)) => ({
   loadAll(): void {
     patchState(store, { loading: true, error: null });
     productService.getAll().subscribe({
@@ -50,30 +58,61 @@ export const EcommerceStore = signalStore(
       next: (categories) => patchState(store, { categories }),
     });
   },
+  loadWishlist(): void {
+  if (!authService.isLoggedIn()) return;
+    wishListService.getWishlist().subscribe({
+      next: (items) => patchState(store, { wishListItems: items }),
+      error: () => { /* silencioso, no bloquea la app */ },
+    });
+  },
   filterBy(categoryName: string | null): void {
     patchState(store, { selectedCategory: categoryName });
-    },
-  addToWishList : (product: ProductResponse) => { 
-    const updatedWishListItem = produce(store.wishListItems(), (draft) => {
-      if(draft.findIndex(p => p.id === product.id)){
-        draft.push(product);
-      }
-    });
-    patchState(store, { wishListItems: updatedWishListItem });
-    toaster.success('Product added to wishlist');
   },
-  removeFromWishList : (product: ProductResponse) => {
-    patchState(store, { wishListItems: store.wishListItems().filter(p => p.id !== product.id) });
-    toaster.success('Product removed from wishlist');
+  addToWishList : (product: ProductResponse) => { 
+    if (!authService.isLoggedIn()) {
+    toaster.info('Iniciá sesión para usar la wishlist');
+    return;
+  }
+  wishListService.add(product.id).subscribe({
+      next: () => {
+        const item: WishListResponse = {
+          id: 0,
+          productId: product.id,
+          productName: product.name,
+          productPrice: product.price,
+          productImageUrl: product.imageUrl ?? '',
+          productStock: product.stock,
+          createdAt: new Date().toISOString(),
+        };
+        patchState(store, { wishListItems: [...store.wishListItems(), item] });
+        toaster.success('Product added to wishlist');
+      },
+      error: () => toaster.error('Error adding to wishlist'),
+    });
+  },
+  removeFromWishList : (productId: number) => {
+      wishListService.remove(productId).subscribe({
+      next: () => {
+        patchState(store, { 
+          wishListItems: store.wishListItems().filter(p => p.productId !== productId) 
+        });
+        toaster.success('Product removed from wishlist');
+      },
+      error: () => toaster.error('Error removing from wishlist'),
+    });
   },
   clearWishlist: () => {
-    patchState(store,{ wishListItems: [] });
-  }
+      store.wishListItems().forEach(item => {
+      wishListService.remove(item.productId).subscribe();
+    });
+    patchState(store, { wishListItems: [] });
+  },
   })),
 
   withHooks({
     onInit(store) {
       store.loadAll();
+      store.loadWishlist();
     },
   }),
 )

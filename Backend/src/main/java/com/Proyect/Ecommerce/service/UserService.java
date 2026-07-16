@@ -1,12 +1,14 @@
 package com.Proyect.Ecommerce.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.Proyect.Ecommerce.dto.user.UserRequestDTO;
 import com.Proyect.Ecommerce.dto.user.UserResponseDTO;
 import com.Proyect.Ecommerce.model.User;
 import com.Proyect.Ecommerce.repository.UserRepository;
-import org.springframework.stereotype.Service;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class UserService {

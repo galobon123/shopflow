@@ -1,17 +1,18 @@
 package com.Proyect.Ecommerce.service;
 
-import com.Proyect.Ecommerce.dto.auth.AuthRequestDTO;
-import com.Proyect.Ecommerce.dto.auth.AuthResponseDTO;
-import com.Proyect.Ecommerce.dto.auth.RegisterRequestDTO;
-import com.Proyect.Ecommerce.model.User;
-import com.Proyect.Ecommerce.repository.UserRepository;
-import com.Proyect.Ecommerce.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.Proyect.Ecommerce.dto.auth.AuthRequestDTO;
+import com.Proyect.Ecommerce.dto.auth.AuthResponseDTO;
+import com.Proyect.Ecommerce.dto.auth.RegisterRequestDTO;
+import com.Proyect.Ecommerce.model.User;
+import com.Proyect.Ecommerce.repository.UserRepository;
+import com.Proyect.Ecommerce.security.JwtService;
 
 @Service
 public class AuthService {
@@ -47,18 +48,16 @@ public class AuthService {
         userRepository.save(user);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(dto.getEmail());
-        String token = jwtService.generateToken(userDetails);
+        String token = jwtService.generateToken(userDetails, user.getId());
         return new AuthResponseDTO(token, user.getEmail(), user.getRole().name());
     }
 
     public AuthResponseDTO login(AuthRequestDTO dto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword()));
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(dto.getEmail());
-        String token = jwtService.generateToken(userDetails);
-
-        User user = userRepository.findByEmail(dto.getEmail()).get();
+                UserDetails userDetails = userDetailsService.loadUserByUsername(dto.getEmail()); 
+                User user = userRepository.findByEmail(dto.getEmail()).get();
+                String token = jwtService.generateToken(userDetails, user.getId());
         return new AuthResponseDTO(token, user.getEmail(), user.getRole().name());
     }
 }

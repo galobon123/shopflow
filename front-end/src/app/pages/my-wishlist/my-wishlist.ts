@@ -5,6 +5,8 @@ import { ProductCard } from "../../components/product-card/product-card";
 import { MatIcon } from "@angular/material/icon";
 import { MatButton } from '@angular/material/button';
 import { EmptyWishlist } from "./empty-wishlist/empty-wishlist";
+import { ProductResponse } from '../../core/models/product.model';
+import { WishListResponse } from '../../core/models/wishlist.model';
 
 @Component({
   selector: 'app-my-wishlist',
@@ -14,4 +16,18 @@ import { EmptyWishlist } from "./empty-wishlist/empty-wishlist";
 })
 export class MyWishlist {
   store = inject(EcommerceStore);
+
+  mapToProduct(item: WishListResponse): ProductResponse {
+    return {
+      id: item.productId,
+      name: item.productName,
+      description: '',
+      price: item.productPrice,
+      stock: item.productStock,
+      categoryName: '',
+      active: true,
+      createdAt: item.createdAt,
+      imageUrl: item.productImageUrl,
+    };
+  }
 }

@@ -15,13 +15,16 @@ export class ToggleWishlistButton {
 
   store = inject(EcommerceStore);
 
-    isInWishlist = computed(() => this.store.wishListItems().find(p => p.id === this.product().id));
+    isInWishlist = computed(() => 
+      this.store.wishListItems().some(item => item.productId === this.product().id)
+    );
 
-    toggleWishlist(product: ProductResponse) {
-      if(this.isInWishlist()){
-        this.store.removeFromWishList(product);
-    } else {
+    toggleWishlist() {
+      const product = this.product();
+      if (this.isInWishlist()) {
+        this.store.removeFromWishList(product.id);
+      } else {
         this.store.addToWishList(product);
+      }
     }
-  }
 }

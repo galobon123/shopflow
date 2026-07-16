@@ -7,7 +7,7 @@ export interface RegisterRequest {
   name: string;
   email: string;
   password: string;
-  role: 'CUSTOMER' | 'ADMIN';
+  role: 'USER' | 'ADMIN';
 }
 
 export interface AuthResponse {

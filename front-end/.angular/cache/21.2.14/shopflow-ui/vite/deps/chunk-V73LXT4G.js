@@ -12,7 +12,7 @@ import {
   setClassMetadata,
   ɵɵdefineComponent,
   ɵɵdefineInjectable
-} from "./chunk-BZ4IC765.js";
+} from "./chunk-XWQQ42E4.js";
 
 // node_modules/@angular/cdk/fesm2022/_style-loader-chunk.mjs
 var appsWithLoaders = /* @__PURE__ */ new WeakMap();
@@ -121,4 +121,4 @@ export {
   trustedHTMLFromString,
   _setInnerHtml
 };
-//# sourceMappingURL=chunk-SR7NOOHU.js.map
+//# sourceMappingURL=chunk-V73LXT4G.js.map

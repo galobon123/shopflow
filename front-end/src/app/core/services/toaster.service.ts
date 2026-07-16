@@ -14,4 +14,8 @@ export class Toaster {
   error(message: string) {
     this.toaster.error(message)
   }
+
+  info(message: string) {
+    this.toaster.info(message)
+  }
 }
